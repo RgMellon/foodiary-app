@@ -1,5 +1,3 @@
-import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
 
 import {
     HostGrotesk_400Regular,
@@ -7,7 +5,9 @@ import {
     HostGrotesk_700Bold,
     HostGrotesk_600SemiBold,
     useFonts,
-} from "@expo-google-fonts/host-grotesk";
+} from '@expo-google-fonts/host-grotesk';
+import { Greetings } from '@ui/screens/Greetings';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 export function App() {
     const [isFontsLoaded] = useFonts({
@@ -22,18 +22,9 @@ export function App() {
     }
 
     return (
-        <View style={styles.container}>
-            <Text>Open up App.tsx to start working on your app!</Text>
-            <StatusBar style="auto" />
-        </View>
+        <SafeAreaProvider>
+        <Greetings />
+        </SafeAreaProvider>
     );
 }
 
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-        justifyContent: "center",
-    },
-});
