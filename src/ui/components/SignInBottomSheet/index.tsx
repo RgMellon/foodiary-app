@@ -7,6 +7,7 @@ import { AppText } from '../AppText';
 import { useSignInBottomSheetController } from './useSignInBottomSheetController';
 import React from 'react';
 import { ISignInBottomSheet } from './ISignInBottomSheet';
+import { Input } from '../Input';
 
 export interface ISignInBottomSheetProps {
     ref: React.Ref<ISignInBottomSheet>
@@ -19,7 +20,9 @@ export function SignInBottomSheet({ ref }: ISignInBottomSheetProps) {
         <BottomSheetModalProvider>
             <BottomSheetModal ref={bottomSheetRef}>
                 <BottomSheetView style={{ paddingBottom: bottom }}>
-                    <AppText>oi</AppText>
+                    <AppText>Acesse sua conta </AppText>
+
+                    <Input disabled  />
                 </BottomSheetView>
             </BottomSheetModal>
         </BottomSheetModalProvider>
