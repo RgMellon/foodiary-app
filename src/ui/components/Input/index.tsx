@@ -1,4 +1,4 @@
-import { TextInput, NativeSyntheticEvent, TargetedEvent } from 'react-native';
+import { TextInput, NativeSyntheticEvent, TargetedEvent, TextInputProps } from 'react-native';
 import { inputStyles } from './styles';
 import { theme } from '@ui/styles/theme';
 import { useState } from 'react';
@@ -8,9 +8,13 @@ type BaseProps = Omit<React.ComponentProps<typeof TextInput>, 'readOnly'>;
 interface IInputProps extends BaseProps {
     error?: boolean
     disabled?: boolean
+    InputComponent?: React.ComponentType<TextInputProps>
+    ref?: React.Ref<TextInput>
 }
 
-export function Input({ error, disabled, style, onFocus, onBlur, ...props }: IInputProps) {
+export function Input({ error, disabled, style, onFocus, onBlur,
+    InputComponent = TextInput,
+    ...props }: IInputProps) {
     const [isFocused, setIsFocused] = useState(false);
 
     function handleFocus(event: NativeSyntheticEvent<TargetedEvent>) {
@@ -24,7 +28,7 @@ export function Input({ error, disabled, style, onFocus, onBlur, ...props }: IIn
     }
 
     return (
-        <TextInput
+        <InputComponent
             style={[
                 inputStyles({
                     status: error? 'error' : (isFocused ? 'focus': 'default'),
