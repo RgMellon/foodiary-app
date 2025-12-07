@@ -9,9 +9,12 @@ import { theme } from '@ui/styles/theme';
 import { SignInBottomSheet } from '@ui/components/SignInBottomSheet';
 import { useRef } from 'react';
 import { ISignInBottomSheet } from '@ui/components/SignInBottomSheet/ISignInBottomSheet';
+import { useNavigation } from '@react-navigation/native';
+import { AuthStackNavigationprops } from '@app/navigation/AuthStack';
 
 export function Greetings() {
     const signInBottomSheetRef = useRef<ISignInBottomSheet>(null);
+    const { navigate } = useNavigation<AuthStackNavigationprops>();
     return (
         <>
             <ImageBackground
@@ -33,7 +36,9 @@ export function Greetings() {
                             Controle sua dieta de forma simples{' '}
                         </AppText>
                         <View style={styles.ctaContent}>
-                            <Button> Criar conta </Button>
+                            <Button onPress={() => {
+                            navigate('OnBoarding');
+                            }}> Criar conta </Button>
 
                             <View style={styles.signInContainer}>
                                 <AppText color={theme.colors.white}>
