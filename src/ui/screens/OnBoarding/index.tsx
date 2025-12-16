@@ -1,16 +1,18 @@
 import { OnboardStack } from '@app/navigation/OnboardStack';
-import { View } from 'react-native';
+import { KeyboardAvoidingView, Platform } from 'react-native';
 import { OnboardProvider } from './context/OnBoardProvider';
 import { OnboardHeader } from './components/OnboardHeader';
 
 export function OnBoarding() {
-
     return (
         <OnboardProvider>
-            <View style={{ flex: 1 }}>
-                <OnboardHeader />
+            <OnboardHeader />
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
                 <OnboardStack />
-            </View>
+            </KeyboardAvoidingView>
         </OnboardProvider>
     );
 }

@@ -43,11 +43,12 @@ export function OnboardStack() {
         <NavigationIndependentTree>
             <NavigationContainer ref={onBoardNavigation}>
                 <Stack.Navigator
-                    initialRouteName="ActivityLevel"
+                    initialRouteName="Goal"
                     screenOptions={{
                         headerShown: false,
                     }}
                 >
+                    <Stack.Screen name="Goal" component={GoalStep} />
                     <Stack.Screen
                         name="ActivityLevel"
                         component={ActivityLevel}
@@ -58,13 +59,13 @@ export function OnboardStack() {
                         component={CreateAccount}
                     />
                     <Stack.Screen name="Gender" component={Gender} />
-                    <Stack.Screen name="Goal" component={GoalStep} />
+
                     <Stack.Screen name="Height" component={Height} />
                     <Stack.Screen name="Weight" component={Weight} />
                 </Stack.Navigator>
-                ;
+
             </NavigationContainer>
-            ;
+
         </NavigationIndependentTree>
     );
 }

@@ -20,7 +20,7 @@ export function OnboardProvider({ children }: {children: React.ReactNode}) {
         setCurrentStepIndex(nextStepIndex);
         onBoardNavigation.navigate(nextStep);
 
-    }, []);
+    }, [currentStepIndex]);
 
     const prevStep = useCallback(() => {
          const prevStepIndex = currentStepIndex -1;
@@ -32,7 +32,7 @@ export function OnboardProvider({ children }: {children: React.ReactNode}) {
 
         setCurrentStepIndex(prevStepIndex);
         onBoardNavigation.goBack();
-    }, []);
+    }, [currentStepIndex]);
 
     return <OnboardContext.Provider value={{ currentStepIndex, nextStep, prevStep }}>
         {children}

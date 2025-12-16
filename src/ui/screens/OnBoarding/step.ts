@@ -4,8 +4,8 @@ export const orderStep: ( keyof OnboardStackParamList)[] = [
     'Goal',
     'Gender',
     'BirthDate',
-    'Weight',
     'Height',
+    'Weight',
     'ActivityLevel',
     'CreateAccount',
 ];

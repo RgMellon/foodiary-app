@@ -35,16 +35,25 @@ export function Greetings() {
                             {' '}
                             Controle sua dieta de forma simples{' '}
                         </AppText>
+
                         <View style={styles.ctaContent}>
-                            <Button onPress={() => {
-                            navigate('OnBoarding');
-                            }}> Criar conta </Button>
+                            <Button
+                                onPress={() => {
+                                    navigate('OnBoarding');
+                                }}
+                            >
+                                Criar conta
+                            </Button>
 
                             <View style={styles.signInContainer}>
                                 <AppText color={theme.colors.white}>
                                     Ja tem uma conta?{' '}
                                 </AppText>
-                                <TouchableOpacity onPress={() => {signInBottomSheetRef.current?.open();}}>
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        signInBottomSheetRef.current?.open();
+                                    }}
+                                >
                                     <AppText
                                         color={theme.colors.lime[500]}
                                         weight="medium"
