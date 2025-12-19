@@ -11,88 +11,151 @@ import {
     StepTitle,
 } from '../../components/Step';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Controller, useFormContext } from 'react-hook-form';
+import { OnboardingSchema } from '../../schema';
 
 export function CreateAccount() {
     const passRef = useRef<TextInput>(null);
     const passRefConfirm = useRef<TextInput>(null);
     const emailRef = useRef<TextInput>(null);
 
-    function handleSubmit() {
-        alert('oi');
-    }
+    const form = useFormContext<OnboardingSchema>();
+
+    const handleSubmit = form.handleSubmit((value) => {
+        console.log(JSON.stringify(value, null, 2));
+    });
 
     return (
         <Step>
             <ScrollView>
-            <StepHeader>
-                <StepTitle>Criar conta</StepTitle>
-            </StepHeader>
-            <StepContent>
-                <View style={{ gap: 32 }}>
-                    <FormGroup label="Nome" error="">
-                        <Input
-                            autoCapitalize="none"
-                            autoCorrect={false}
-                            returnKeyType="next"
-                            onSubmitEditing={() => {
-                                emailRef.current?.focus();
-                            }}
+                <StepHeader>
+                    <StepTitle>Criar conta</StepTitle>
+                </StepHeader>
+                <StepContent>
+                    <View style={{ gap: 32 }}>
+                        <Controller
+                            name={'account.name'}
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <FormGroup
+                                    label="Nome"
+                                    error={fieldState.error?.message}
+                                >
+                                    <Input
+                                        autoCapitalize="none"
+                                        autoCorrect={false}
+                                        returnKeyType="next"
+                                        placeholder="Seu nome"
+                                        onChangeText={(value) => {
+                                            field.onChange(value);
+                                            form.trigger('account.name');
+                                        }}
+                                        value={field.value}
+                                        onSubmitEditing={() => {
+                                            emailRef.current?.focus();
+                                        }}
+                                    />
+                                </FormGroup>
+                            )}
                         />
-                    </FormGroup>
 
-                    <FormGroup label="E-mail" error="">
-                        <Input
-                            keyboardType="email-address"
-                            autoCapitalize="none"
-                            ref={emailRef}
-                            autoCorrect={false}
-                            autoComplete="email"
-                            returnKeyType="next"
-                            onSubmitEditing={() => {
-                                passRef.current?.focus();
-                            }}
+                        <Controller
+                            name={'account.email'}
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <FormGroup
+                                    label="E-mail"
+                                    error={fieldState.error?.message}
+                                >
+                                    <Input
+                                        keyboardType="email-address"
+                                        autoCapitalize="none"
+                                        ref={emailRef}
+                                        autoCorrect={false}
+                                        autoComplete="email"
+                                        returnKeyType="next"
+                                        onChangeText={(value) => {
+                                            field.onChange(value);
+                                            form.trigger('account.email');
+                                        }}
+                                        value={field.value}
+                                        onSubmitEditing={() => {
+                                            passRef.current?.focus();
+                                        }}
+                                    />
+                                </FormGroup>
+                            )}
                         />
-                    </FormGroup>
 
-                    <FormGroup label="Senha">
-                        <Input
-                            placeholder='Sua senha'
-                            secureTextEntry
-                            autoCapitalize="none"
-                            autoComplete="password"
-                            returnKeyType="done"
-                            ref={passRef}
-                            onSubmitEditing={() => {
-                                passRefConfirm.current?.focus();
-                            }}
+                        <Controller
+                            name={'account.password'}
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <FormGroup
+                                    label="Senha"
+                                    error={fieldState.error?.message}
+                                >
+                                    <Input
+                                        placeholder="Sua senha"
+                                        secureTextEntry
+                                        autoCapitalize="none"
+                                        autoComplete="password"
+                                        returnKeyType="done"
+                                        ref={passRef}
+                                        onChangeText={(value) => {
+                                            field.onChange(value);
+                                            form.trigger('account.password');
+                                        }}
+                                        value={field.value}
+                                        onSubmitEditing={() => {
+                                            passRefConfirm.current?.focus();
+                                        }}
+                                    />
+                                </FormGroup>
+                            )}
                         />
-                    </FormGroup>
 
-                    <FormGroup label="Confirmar Senha">
-                        <Input
-                         placeholder='Confirme sua senha'
-                            secureTextEntry
-                            autoCapitalize="none"
-                            autoComplete="password"
-                            returnKeyType="done"
-                            ref={passRefConfirm}
-                            onSubmitEditing={() => {
-                                handleSubmit();
-                            }}
+                        <Controller
+                            name={'account.confirmPassword'}
+                            control={form.control}
+                            render={({ field, fieldState }) => (
+                                <FormGroup
+                                    label="Confirmar Senha"
+                                    error={fieldState.error?.message}
+                                >
+                                    <Input
+                                        placeholder="Confirme sua senha"
+                                        secureTextEntry
+                                        autoCapitalize="none"
+                                        autoComplete="password"
+                                        returnKeyType="done"
+                                        ref={passRefConfirm}
+                                        onChangeText={(value) => {
+                                            field.onChange(value);
+                                            form.trigger(
+                                                'account.confirmPassword',
+                                            );
+                                        }}
+                                        value={field.value}
+                                        onSubmitEditing={() => {
+                                            handleSubmit();
+                                        }}
+                                    />
+                                </FormGroup>
+                            )}
                         />
-                    </FormGroup>
-                </View>
-            </StepContent>
+                    </View>
+                </StepContent>
 
-            <StepFooter align="center">
-                <Button
-                    style={{ width: '100%' }}
-                    size="default"
-                    onPress={handleSubmit}
-                >
-                    Cadastrar
-                </Button>
-            </StepFooter>
+                <StepFooter align="center">
+                    <Button
+                        style={{ width: '100%' }}
+                        size="default"
+                        onPress={handleSubmit}
+                    >
+                        Cadastrar
+                    </Button>
+                </StepFooter>
             </ScrollView>
         </Step>
     );

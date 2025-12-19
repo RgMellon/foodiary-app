@@ -16,19 +16,28 @@ import RNDateTimePicker, {
 import { Platform, TouchableOpacity } from 'react-native';
 import { AppText } from '@ui/components/AppText';
 import { theme } from '@ui/styles/theme';
+import { OnboardingSchema } from '../schema';
+import { Controller, useFormContext } from 'react-hook-form';
 
 export function BirthDate() {
     const isIOS = Platform.OS === 'ios';
     const { nextStep } = useOnboard();
-    const [date, setDate] = useState(new Date());
     const [show, setShow] = useState(true);
+    const form = useFormContext<OnboardingSchema>();
 
     function handleSelectDate(_: DateTimePickerEvent, newDate?: Date) {
         if (!newDate) {
             return;
         }
-        setDate(newDate);
+        form.setValue('birthDate', newDate);
         setShow(isIOS);
+    }
+
+    async function handleNextStep() {
+        const isValid = await form.trigger('birthDate');
+        if (isValid) {
+            nextStep();
+        }
     }
 
     return (
@@ -40,34 +49,44 @@ export function BirthDate() {
                 </StepSubTitle>
             </StepHeader>
             <StepContent position="center">
-                {show && (
-                    <RNDateTimePicker
-                        onChange={handleSelectDate}
-                        display={isIOS ? 'spinner' : 'default'}
-                        mode="date"
-                        value={date}
-                    />
-                )}
+                <Controller
+                    name="birthDate"
+                    control={form.control}
+                    render={({ field }) => (
+                        <>
+                            {show && (
+                                <RNDateTimePicker
+                                    onChange={handleSelectDate}
+                                    display={isIOS ? 'spinner' : 'default'}
+                                    mode="date"
+                                    value={field.value}
+                                />
+                            )}
 
-                {!isIOS && (
-                    <TouchableOpacity
-                        onPress={() => {
-                            setShow(true);
-                        }}
-                    >
-                        <AppText
-                            weight="semiBold"
-                            size="3xl"
-                            color={theme.colors.gray['700']}
-                        >
-                            {date.toLocaleDateString('pt-BR')}
-                        </AppText>
-                    </TouchableOpacity>
-                )}
+                            {!isIOS && (
+                                <TouchableOpacity
+                                    onPress={() => {
+                                        setShow(true);
+                                    }}
+                                >
+                                    <AppText
+                                        weight="semiBold"
+                                        size="3xl"
+                                        color={theme.colors.gray['700']}
+                                    >
+                                        {field.value.toLocaleDateString(
+                                            'pt-BR',
+                                        )}
+                                    </AppText>
+                                </TouchableOpacity>
+                            )}
+                        </>
+                    )}
+                />
             </StepContent>
 
             <StepFooter>
-                <Button size="icon" onPress={nextStep}>
+                <Button size="icon" onPress={handleNextStep}>
                     <ArrowRight />
                 </Button>
             </StepFooter>

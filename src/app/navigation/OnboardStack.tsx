@@ -39,6 +39,7 @@ export const onBoardNavigation =
     createNavigationContainerRef<OnboardStackParamList>();
 
 export function OnboardStack() {
+
     return (
         <NavigationIndependentTree>
             <NavigationContainer ref={onBoardNavigation}>

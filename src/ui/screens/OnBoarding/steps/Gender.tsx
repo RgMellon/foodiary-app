@@ -16,39 +16,59 @@ import {
     RadioGroupItem,
     RadioGroupLabel,
 } from '@ui/components/RadioGroup';
-
-enum GenderOptions {
-    MALE = 'MALE',
-    FEMALE = 'FEMALE',
-}
+import { GenderOptions } from '@app/types/GenderOptions';
+import { Controller, useFormContext } from 'react-hook-form';
+import { OnboardingSchema } from '../schema';
 
 export function Gender() {
     const { nextStep } = useOnboard();
+    const form = useFormContext<OnboardingSchema>();
+
+    async function handleNextStep() {
+        const isValid = await form.trigger('gender');
+        if (isValid) {
+            nextStep();
+        }
+    }
 
     return (
         <Step>
             <StepHeader>
                 <StepTitle>Qual seu gênero?</StepTitle>
                 <StepSubTitle>
-                   Seu gênero influencia no tipo da dieta
+                    Seu gênero influencia no tipo da dieta
                 </StepSubTitle>
             </StepHeader>
             <StepContent>
-                <RadioGroup orientation="horizontal">
-                    <RadioGroupItem value={GenderOptions.MALE}>
-                        <RadioGroupIcon> 👨 </RadioGroupIcon>
-                        <RadioGroupLabel> Masculino </RadioGroupLabel>
-                    </RadioGroupItem>
+                <Controller
+                    name="gender"
+                    control={form.control}
+                    render={({ field: { onChange, value }, fieldState }) => (
+                        <RadioGroup
+                            orientation="horizontal"
+                            onChangeValue={(value) => {
+                                onChange(value);
+                                form.trigger('gender');
+                            }}
+                            error={!!fieldState.error}
+                            value={value}
+                        >
+                            <RadioGroupItem value={GenderOptions.MALE}>
+                                <RadioGroupIcon> 👨 </RadioGroupIcon>
+                                <RadioGroupLabel> Masculino </RadioGroupLabel>
+                            </RadioGroupItem>
 
-                    <RadioGroupItem value={GenderOptions.FEMALE}>
-                        <RadioGroupIcon> 👩 </RadioGroupIcon>
-                        <RadioGroupLabel> Feminio </RadioGroupLabel>
-                    </RadioGroupItem>
-                </RadioGroup>
+                            <RadioGroupItem value={GenderOptions.FEMALE}>
+                                <RadioGroupIcon> 👩 </RadioGroupIcon>
+                                <RadioGroupLabel> Feminio </RadioGroupLabel>
+                            </RadioGroupItem>
+                        </RadioGroup>
+                    )}
+                />
             </StepContent>
 
             <StepFooter>
-                <Button size="icon" onPress={nextStep}>
+                <Button size="icon" onPress={handleNextStep}>
                     <ArrowRight />
                 </Button>
             </StepFooter>

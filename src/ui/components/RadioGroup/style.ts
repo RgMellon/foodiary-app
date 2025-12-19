@@ -24,6 +24,10 @@ export const Styles = StyleSheet.create({
         borderColor: theme.colors.lime[700],
         backgroundColor: theme.colors.lime['700/10'],
     },
+    itemSelectedError: {
+        borderColor: theme.colors.support.red,
+        backgroundColor: theme.colors.support['red/10'],
+    },
 
     itemHorizontal: {
         flexDirection: 'column',

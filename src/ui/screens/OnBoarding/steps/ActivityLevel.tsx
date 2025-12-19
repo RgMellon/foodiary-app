@@ -17,77 +17,104 @@ import {
     RadioGroupLabel,
     RadiouGroupItemWrapper,
 } from '@ui/components/RadioGroup';
-
-enum ActivityLevelOptions {
-    SEDENTARY = 'SEDENTARY',
-    LIGHT = 'LIGHT',
-    MODERATED = 'MODERATED',
-    HEAVY = 'HEAVY',
-    ATHLETE = 'ATHLETE',
-}
+import { ActivityLevelOptions } from '@app/types/ActivityLevel';
+import { Controller, useFormContext } from 'react-hook-form';
+import { OnboardingSchema } from '../schema';
 
 export function ActivityLevel() {
     const { nextStep } = useOnboard();
+    const form = useFormContext<OnboardingSchema>();
+
+    async function handleNextStep() {
+        const isValid = await form.trigger('activityLevel');
+
+        if (isValid) {
+            nextStep();
+        }
+    }
+
     return (
         <Step>
             <StepHeader>
                 <StepTitle>Qual o seu nível de atividade ?</StepTitle>
             </StepHeader>
-            <StepContent>
-                <RadioGroup orientation="vertical">
-                    <RadioGroupItem value={ActivityLevelOptions.SEDENTARY}>
-                        <RadioGroupIcon>🛋️</RadioGroupIcon>
-                        <RadiouGroupItemWrapper>
-                            <RadioGroupLabel>Sedentario</RadioGroupLabel>
-                            <RadioGroupDescription>
-                                1 a 2 vezes por semana
-                            </RadioGroupDescription>
-                        </RadiouGroupItemWrapper>
-                    </RadioGroupItem>
+            <Controller
+                name="activityLevel"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                    <StepContent>
+                        <RadioGroup
+                            orientation="vertical"
+                            onChangeValue={(value) => {
+                                field.onChange(value);
+                                form.trigger('activityLevel');
+                            }}
+                            value={field.value}
+                            error={!!fieldState.error}
+                        >
+                            <RadioGroupItem
+                                value={ActivityLevelOptions.SEDENTARY}
+                            >
+                                <RadioGroupIcon>🛋️</RadioGroupIcon>
+                                <RadiouGroupItemWrapper>
+                                    <RadioGroupLabel>
+                                        Sedentario
+                                    </RadioGroupLabel>
+                                    <RadioGroupDescription>
+                                        1 a 2 vezes por semana
+                                    </RadioGroupDescription>
+                                </RadiouGroupItemWrapper>
+                            </RadioGroupItem>
 
-                    <RadioGroupItem value={ActivityLevelOptions.LIGHT}>
-                        <RadioGroupIcon>🥬</RadioGroupIcon>
-                        <RadiouGroupItemWrapper>
-                            <RadioGroupLabel>Leve</RadioGroupLabel>
-                            <RadioGroupDescription>
-                                3 a 5 vezes por semana
-                            </RadioGroupDescription>
-                        </RadiouGroupItemWrapper>
-                    </RadioGroupItem>
+                            <RadioGroupItem value={ActivityLevelOptions.LIGHT}>
+                                <RadioGroupIcon>🥬</RadioGroupIcon>
+                                <RadiouGroupItemWrapper>
+                                    <RadioGroupLabel>Leve</RadioGroupLabel>
+                                    <RadioGroupDescription>
+                                        3 a 5 vezes por semana
+                                    </RadioGroupDescription>
+                                </RadiouGroupItemWrapper>
+                            </RadioGroupItem>
 
-                    <RadioGroupItem value={ActivityLevelOptions.MODERATED}>
-                        <RadioGroupIcon>⚡️</RadioGroupIcon>
-                        <RadiouGroupItemWrapper>
-                            <RadioGroupLabel>Moderado</RadioGroupLabel>
-                            <RadioGroupDescription>
-                                3 a 5 vezes por semana
-                            </RadioGroupDescription>
-                        </RadiouGroupItemWrapper>
-                    </RadioGroupItem>
+                            <RadioGroupItem
+                                value={ActivityLevelOptions.MODERATED}
+                            >
+                                <RadioGroupIcon>⚡️</RadioGroupIcon>
+                                <RadiouGroupItemWrapper>
+                                    <RadioGroupLabel>Moderado</RadioGroupLabel>
+                                    <RadioGroupDescription>
+                                        3 a 5 vezes por semana
+                                    </RadioGroupDescription>
+                                </RadiouGroupItemWrapper>
+                            </RadioGroupItem>
 
-                    <RadioGroupItem value={ActivityLevelOptions.HEAVY}>
-                        <RadioGroupIcon>🔥</RadioGroupIcon>
-                        <RadiouGroupItemWrapper>
-                            <RadioGroupLabel>Pesado</RadioGroupLabel>
-                            <RadioGroupDescription>
-                                6 a 7 vezes por semana
-                            </RadioGroupDescription>
-                        </RadiouGroupItemWrapper>
-                    </RadioGroupItem>
+                            <RadioGroupItem value={ActivityLevelOptions.HEAVY}>
+                                <RadioGroupIcon>🔥</RadioGroupIcon>
+                                <RadiouGroupItemWrapper>
+                                    <RadioGroupLabel>Pesado</RadioGroupLabel>
+                                    <RadioGroupDescription>
+                                        6 a 7 vezes por semana
+                                    </RadioGroupDescription>
+                                </RadiouGroupItemWrapper>
+                            </RadioGroupItem>
 
-                    <RadioGroupItem value={ActivityLevelOptions.ATHLETE}>
-                        <RadioGroupIcon>🏋️</RadioGroupIcon>
-                        <RadiouGroupItemWrapper>
-                            <RadioGroupLabel>Atleta</RadioGroupLabel>
-                            <RadioGroupDescription>
-                                Todos os dias
-                            </RadioGroupDescription>
-                        </RadiouGroupItemWrapper>
-                    </RadioGroupItem>
-                </RadioGroup>
-            </StepContent>
+                            <RadioGroupItem
+                                value={ActivityLevelOptions.ATHLETE}
+                            >
+                                <RadioGroupIcon>🏋️</RadioGroupIcon>
+                                <RadiouGroupItemWrapper>
+                                    <RadioGroupLabel>Atleta</RadioGroupLabel>
+                                    <RadioGroupDescription>
+                                        Todos os dias
+                                    </RadioGroupDescription>
+                                </RadiouGroupItemWrapper>
+                            </RadioGroupItem>
+                        </RadioGroup>
+                    </StepContent>
+                )}
+            />
             <StepFooter>
-                <Button size="icon" onPress={nextStep}>
+                <Button size="icon" onPress={handleNextStep}>
                     <ArrowRight />
                 </Button>
             </StepFooter>

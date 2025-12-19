@@ -2,36 +2,41 @@ import { TouchableOpacity, View } from 'react-native';
 import { Styles } from './style';
 import { AppText } from '../AppText';
 import { theme } from '@ui/styles/theme';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext } from 'react';
 
 interface IRadioGroupContextValue {
     value: string | null;
-    setValue: (value: string | null) => void;
+    setValue: (value: string) => void;
     isHorizontal: boolean;
+    error: boolean;
 }
 
 const RadioGroupContext = createContext({} as IRadioGroupContextValue);
 
 interface IRadioGroupProps {
     children: React.ReactNode;
-    initialValue?: string;
+    value: string | null;
+    onChangeValue: (value: string) => void;
+    error?: boolean;
     orientation?: 'vertical' | 'horizontal';
 }
 
 export function RadioGroup({
     children,
-    initialValue,
+    value,
+    onChangeValue,
+    error = false,
     orientation = 'vertical',
 }: IRadioGroupProps) {
-    const [value, setValue] = useState<string | null>(initialValue ?? null);
     const isHorizontal = orientation === 'horizontal';
 
     return (
         <RadioGroupContext.Provider
             value={{
-                setValue,
+                setValue: onChangeValue,
                 value,
                 isHorizontal,
+                error: error,
             }}
         >
             <View
@@ -56,6 +61,7 @@ export function RadioGroupItem({ children, value }: IRadiouGroupItem) {
         value: selectedValue,
         setValue,
         isHorizontal,
+        error,
     } = useContext(RadioGroupContext);
     const isSelected = selectedValue === value;
 
@@ -66,6 +72,7 @@ export function RadioGroupItem({ children, value }: IRadiouGroupItem) {
                 Styles.item,
                 isSelected && Styles.itemSelected,
                 isHorizontal && Styles.itemHorizontal,
+                error && Styles.itemSelectedError,
             ]}
         >
             {children}
