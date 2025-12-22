@@ -1,15 +1,18 @@
 import React from 'react';
-import { Platform, Pressable, View } from 'react-native';
+import { ActivityIndicator, Platform, Pressable, View } from 'react-native';
 
 import { AppText } from '../AppText';
 import { buttonStyles, ButtonVariants, styles } from './styles';
 
-interface IButtonProps extends React.ComponentProps<typeof Pressable>, Omit<ButtonVariants, 'disabled'> {}
+interface IButtonProps extends React.ComponentProps<typeof Pressable>, Omit<ButtonVariants, 'disabled'> {
+    isLoading?: boolean
+}
 
 export function Button({
   children,
   variant,
   size,
+  isLoading = false,
   disabled,
   style,
   ...props
@@ -29,10 +32,10 @@ export function Button({
           pressed && Platform.OS === 'ios' && { opacity: 0.7 },
           typeof style === 'function' ? style({ pressed }) : style,
         ]}
-        disabled={disabled}
+        disabled={disabled || isLoading}
         {...props}
       >
-        {childEl}
+        {isLoading ? <ActivityIndicator /> : childEl }
       </Pressable>
     </View>
   );

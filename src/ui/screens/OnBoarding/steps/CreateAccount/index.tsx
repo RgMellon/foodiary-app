@@ -2,7 +2,7 @@ import { Button } from '@ui/components/Button';
 import { FormGroup } from '@ui/components/FormGroup';
 import { Input } from '@ui/components/Input';
 import React, { useRef } from 'react';
-import { TextInput, View } from 'react-native';
+import { Alert, TextInput, View } from 'react-native';
 import {
     Step,
     StepContent,
@@ -13,6 +13,8 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { Controller, useFormContext } from 'react-hook-form';
 import { OnboardingSchema } from '../../schema';
+import { AuthService } from '@app/services/AuthService';
+import { isAxiosError } from 'axios';
 
 export function CreateAccount() {
     const passRef = useRef<TextInput>(null);
@@ -21,8 +23,48 @@ export function CreateAccount() {
 
     const form = useFormContext<OnboardingSchema>();
 
-    const handleSubmit = form.handleSubmit((value) => {
-        console.log(JSON.stringify(value, null, 2));
+    const handleSubmit = form.handleSubmit(async (data) => {
+        console.log(data, 'data');
+        const birthDate = data.birthDate.toISOString().split('T')[0];
+
+        try {
+            await AuthService.signUp({
+                account: {
+                    email: data.account.email,
+                    password: data.account.password,
+                },
+                profile: {
+                    activityLevel: data.activityLevel,
+                    birthDate,
+                    gender: data.gender,
+                    goal: data.goal,
+                    name: data.account.name,
+                    height: Number(data.height),
+                    weight: Number(data.weight),
+                },
+
+    //             "account": {
+	// 	"email": "rgmelo94@gmail.com",
+	// 	"password": "naner994@d"
+	// },
+	// "profile": {
+	// 	"name": "Renan",
+	// 	"birthDate": "1994-08-02",
+	// 	"goal": "MAINTAIN",
+	// 	"gender": "MALE",
+	// 	"height": 175,
+	// 	"weight": 78,
+	// 	"activityLevel": "MODERATE"
+	// }
+            });
+        } catch (error) {
+            if (isAxiosError(error)) {
+                console.log(JSON.stringify(error.response?.data));
+                Alert.alert(
+                    'Falha ao criar usuário, revise os dados e tente novamente',
+                );
+            }
+        }
     });
 
     return (
@@ -149,6 +191,7 @@ export function CreateAccount() {
 
                 <StepFooter align="center">
                     <Button
+                        isLoading={form.formState.isSubmitting}
                         style={{ width: '100%' }}
                         size="default"
                         onPress={handleSubmit}
