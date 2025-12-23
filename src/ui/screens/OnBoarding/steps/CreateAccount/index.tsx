@@ -13,10 +13,11 @@ import {
 import { ScrollView } from 'react-native-gesture-handler';
 import { Controller, useFormContext } from 'react-hook-form';
 import { OnboardingSchema } from '../../schema';
-import { AuthService } from '@app/services/AuthService';
 import { isAxiosError } from 'axios';
+import { useAuth } from '@app/context/AuthContext/useAuth';
 
 export function CreateAccount() {
+    const { signUp } = useAuth();
     const passRef = useRef<TextInput>(null);
     const passRefConfirm = useRef<TextInput>(null);
     const emailRef = useRef<TextInput>(null);
@@ -24,11 +25,10 @@ export function CreateAccount() {
     const form = useFormContext<OnboardingSchema>();
 
     const handleSubmit = form.handleSubmit(async (data) => {
-        console.log(data, 'data');
         const birthDate = data.birthDate.toISOString().split('T')[0];
 
         try {
-            await AuthService.signUp({
+            await signUp({
                 account: {
                     email: data.account.email,
                     password: data.account.password,
@@ -42,20 +42,6 @@ export function CreateAccount() {
                     height: Number(data.height),
                     weight: Number(data.weight),
                 },
-
-    //             "account": {
-	// 	"email": "rgmelo94@gmail.com",
-	// 	"password": "naner994@d"
-	// },
-	// "profile": {
-	// 	"name": "Renan",
-	// 	"birthDate": "1994-08-02",
-	// 	"goal": "MAINTAIN",
-	// 	"gender": "MALE",
-	// 	"height": 175,
-	// 	"weight": 78,
-	// 	"activityLevel": "MODERATE"
-	// }
             });
         } catch (error) {
             if (isAxiosError(error)) {

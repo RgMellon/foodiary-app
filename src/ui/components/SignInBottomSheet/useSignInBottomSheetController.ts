@@ -6,13 +6,14 @@ import { TextInput } from 'react-native-gesture-handler';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { signInSchema } from './signInSchema';
-import { AuthService } from '@app/services/AuthService';
 import { isAxiosError } from 'axios';
 import { Alert } from 'react-native';
+import { useAuth } from '@app/context/AuthContext/useAuth';
 
 export function useSignInBottomSheetController(
     ref: React.Ref<ISignInBottomSheet>,
 ) {
+    const { signIn } = useAuth();
     const bottomSheetRef = useRef<BottomSheetModal>(null);
     const passRef = useRef<TextInput>(null);
 
@@ -32,7 +33,7 @@ export function useSignInBottomSheetController(
 
     const handleSubmit = form.handleSubmit(async (data) => {
         try {
-            await AuthService.signIn(data);
+            await signIn(data);
         } catch (err) {
             if (isAxiosError(err)) {
                 const isInvalidAcess =
