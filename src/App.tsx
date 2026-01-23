@@ -20,7 +20,7 @@ export function App() {
         HostGrotesk_600SemiBold,
     });
 
-    if (!isFontsLoaded) {
+    if(!isFontsLoaded) {
         return null;
     }
 

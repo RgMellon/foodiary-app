@@ -24,9 +24,36 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         enabled: false,
     });
 
+     const signOut = useCallback(async () => {
+        await AuthManagerToken.clear();
+        client.clear();
+        Service.removeAccessToken();
+        Service.removeRefreshTokenHandler();
+        forceRender();
+    }, []);
+
     const setupToken = useCallback(
         async (token: IAuthToken) => {
             Service.setToken(token.accessToken);
+            Service.addRefreshTokenInterceptor(async () => {
+                try {
+                    const storagedToken = await AuthManagerToken.load();
+
+                if(!storagedToken) {
+                    throw new Error('Tokens not found');
+                }
+
+                const newTokens = await AuthService.refreshToken({
+                    refreshToken: storagedToken.refreshToken,
+                });
+
+                Service.setToken(newTokens.accessToken);
+                await AuthManagerToken.save(newTokens);
+                } catch {
+                    signOut();
+                }
+            });
+
             await refetchAccount();
             await SplashScreen.hideAsync();
             setIsReady(true);
@@ -60,13 +87,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const tokens = await AuthService.signUp(payload);
         await AuthManagerToken.save(tokens);
         await setupToken(tokens);
-    }, []);
-
-    const signOut = useCallback(async () => {
-        await AuthManagerToken.clear();
-        client.clear();
-        Service.removeAccessToken();
-        forceRender();
     }, []);
 
     if (!isReady) {
