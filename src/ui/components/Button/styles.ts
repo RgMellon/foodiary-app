@@ -8,6 +8,10 @@ export const styles = StyleSheet.create({
         borderRadius: 12,
         overflow: 'hidden',
     },
+    content: {
+        flexDirection: 'row',
+        gap: 10,
+    },
 });
 
 export const buttonStyles = createVariants({

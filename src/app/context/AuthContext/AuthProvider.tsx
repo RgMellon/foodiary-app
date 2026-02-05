@@ -19,6 +19,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     const forceRender = useRender();
     const client = useQueryClient();
 
+    const [signedUp, setSignedUp] = useState(false);
     const [isReady, setIsReady] = useState(false);
     const { account, refetchAccount } = useAccount({
         enabled: false,
@@ -87,6 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         const tokens = await AuthService.signUp(payload);
         await AuthManagerToken.save(tokens);
         await setupToken(tokens);
+        setSignedUp(true);
     }, []);
 
     if (!isReady) {
@@ -96,10 +98,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return (
         <AuthContext.Provider
             value={{
+                account: account!,
                 signedIn: !!account,
                 signIn,
                 signUp,
                 signOut,
+                signedUp,
             }}
         >
             {children}

@@ -1,6 +1,7 @@
 import { Service } from './Service';
 import { GenderOptions } from '@app/types/GenderOptions';
 import { ActivityLevelOptions } from '@app/types/ActivityLevel';
+import { Goal } from '@app/types/Goal';
 
 export class AccountService extends Service {
     static async me(): Promise<AccountService.MeResponse> {
@@ -31,6 +32,7 @@ export namespace AccountService {
             height: number;
             weight: number;
             activityLevel: ActivityLevelOptions;
+            goal: Goal
         };
     };
 }

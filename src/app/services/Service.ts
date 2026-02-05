@@ -29,7 +29,7 @@ export abstract class Service {
         this.refreshTokenInterceptorId = this.client.interceptors.response.use(
             response => response,
             async (error) => {
-                if(!isAxiosError(error) || error.response?.status !== 401 || !error.config || error.config.url === "/auth/refresh-token") {
+                if(!isAxiosError(error) || error.response?.status !== 401 || !error.config || error.config.url === '/auth/refresh-token') {
                     return Promise.reject(error);
                 }
 
