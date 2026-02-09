@@ -2,43 +2,72 @@ import { View } from 'react-native';
 import { style } from './styles';
 import { AppText } from '../AppText';
 import { theme } from '@ui/styles/theme';
+import { Meal } from '@app/types/Meal';
 
-export function MealCard() {
+interface IMealCard {
+    meal: Meal;
+}
+
+export function MealCard({ meal }: IMealCard) {
     return (
         <View style={style.container}>
-            <AppText>12h15</AppText>
+            <AppText>{formatTime(meal.createdAt)}</AppText>
 
-            <Card protein={200} fat={100} carb={50} cal={20} />
+            <Card name={meal.name} icon={meal.icon} foods={meal.foods} />
         </View>
     );
 }
 
 interface IOption {
-    protein: number;
-    fat: number;
-    carb: number;
-    cal: number;
+    foods: {
+        name: string;
+        calories: number;
+        fat: number;
+        proteins: number;
+        carbohydrates: number;
+        quantity: string;
+    }[];
+    name: string;
+    icon: string;
 }
 
-function Card({ cal, carb, fat, protein }: IOption) {
+function Card({ foods, name, icon }: IOption) {
+    const formatedFoods = foods.map((food) => food.name).join(', ');
+
+    const summary = foods.reduce(
+        (acc, food) => {
+            acc.calories += food.calories;
+            acc.fat += food.fat;
+            acc.proteins += food.proteins;
+            acc.carbohydrates += food.carbohydrates;
+            return acc;
+        },
+        {
+            calories: 0,
+            fat: 0,
+            proteins: 0,
+            carbohydrates: 0,
+        },
+    );
+
     return (
         <View style={style.card}>
             <View style={style.header}>
                 <View style={style.icon}>
-                    <AppText>🍞</AppText>
+                    <AppText>{icon}</AppText>
                 </View>
                 <View>
                     <AppText weight="bold" color={theme.colors.gray[600]}>
-                        Café da manhã{' '}
+                        {name}
                     </AppText>
-                    <AppText weight="bold">Pão, Manteiga e café</AppText>
+                    <AppText weight="bold">{formatedFoods}</AppText>
                 </View>
             </View>
 
             <View style={style.content}>
                 <View style={style.info}>
                     <AppText weight="bold" color={theme.colors.support.red}>
-                        {cal}
+                        {summary.calories}
                     </AppText>
                     <AppText size="sm" color={theme.colors.gray[600]}>
                         Kcal
@@ -47,7 +76,7 @@ function Card({ cal, carb, fat, protein }: IOption) {
 
                 <View style={style.info}>
                     <AppText weight="bold" color={theme.colors.support.green}>
-                        {protein}
+                        {summary.proteins}
                     </AppText>
                     <AppText size="sm" color={theme.colors.gray[600]}>
                         Proteinas
@@ -56,7 +85,7 @@ function Card({ cal, carb, fat, protein }: IOption) {
 
                 <View style={style.info}>
                     <AppText weight="bold" color={theme.colors.support.ambar}>
-                        {carb}
+                        {summary.carbohydrates}
                     </AppText>
                     <AppText size="sm" color={theme.colors.gray[600]}>
                         Carboidratos
@@ -65,7 +94,7 @@ function Card({ cal, carb, fat, protein }: IOption) {
 
                 <View style={style.info}>
                     <AppText weight="bold" color={theme.colors.support.yellow}>
-                        {fat}
+                        {summary.fat}
                     </AppText>
                     <AppText size="sm" color={theme.colors.gray[600]}>
                         Gordura
@@ -74,4 +103,11 @@ function Card({ cal, carb, fat, protein }: IOption) {
             </View>
         </View>
     );
+}
+
+function formatTime(date: Date) {
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getHours().toString().padStart(2, '0');
+
+    return `${hours}:${minutes}`;
 }

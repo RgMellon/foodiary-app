@@ -5,6 +5,7 @@ export const style = StyleSheet.create({
     container: {
         flexDirection: 'row',
         gap: 16,
+        marginTop: 20,
     },
     button: {
         borderWidth: 1,

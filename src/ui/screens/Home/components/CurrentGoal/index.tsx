@@ -1,21 +1,28 @@
 import { View } from 'react-native';
 import { styles } from './styles';
 import { GoalStats } from '@ui/components/GoalStats';
+import { MacroProgress } from '@ui/components/GoalStats/types';
 
-export function CurrentGoal() {
+interface ICurrentGoalProps {
+    calories: MacroProgress;
+    carbohydrates: MacroProgress;
+    proteins: MacroProgress;
+    fats: MacroProgress;
+}
+
+export function CurrentGoal({
+    calories,
+    carbohydrates,
+    fats,
+    proteins,
+}: ICurrentGoalProps) {
     return (
         <View style={styles.container}>
             <GoalStats
-                calories={{
-                    goal: 200,
-                }}
-                carbohydrates={{
-                    goal: 200,
-                }}
-                proteins={{
-                    goal: 200,
-                }}
-                fats={{ goal: 200 }}
+                calories={calories}
+                carbohydrates={carbohydrates}
+                proteins={proteins}
+                fats={fats}
             />
         </View>
     );
