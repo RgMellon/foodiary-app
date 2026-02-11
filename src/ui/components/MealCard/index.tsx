@@ -3,14 +3,17 @@ import { style } from './styles';
 import { AppText } from '../AppText';
 import { theme } from '@ui/styles/theme';
 import { Meal } from '@app/types/Meal';
+import { useHome } from '@app/context/HomeContext/useHome';
 
 interface IMealCard {
     meal: Meal;
 }
 
 export function MealCard({ meal }: IMealCard) {
+    const { isFetching } = useHome();
+
     return (
-        <View style={style.container}>
+        <View style={[style.container, { opacity: isFetching ? 0.5 : 1 }]}>
             <AppText>{formatTime(meal.createdAt)}</AppText>
 
             <Card name={meal.name} icon={meal.icon} foods={meal.foods} />

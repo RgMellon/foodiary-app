@@ -4,17 +4,13 @@ import { styles } from './styles';
 import { SwitchDate } from '../SwitchDate';
 import { CurrentGoal } from '../CurrentGoal';
 import { AppText } from '@ui/components/AppText';
-import { Meal } from '@app/types/Meal';
 import { useAccount } from '@app/hooks/query/useAccount';
+import { useHome } from '@app/context/HomeContext/useHome';
 
-interface IHeaderProps {
-    date: Date;
-    onDateChange: (date: Date) => void;
-    meals: Meal[];
-}
-
-export function Header({ date, onDateChange, meals }: IHeaderProps) {
+export function Header() {
     const { account } = useAccount();
+    const { meals } = useHome();
+
     const summary = meals
         .flatMap((meal) => meal.foods)
         .reduce(
@@ -33,13 +29,11 @@ export function Header({ date, onDateChange, meals }: IHeaderProps) {
             },
         );
 
-    console.log(summary);
-
     return (
         <View>
             <UserInfo />
             <View style={styles.content}>
-                <SwitchDate date={date} onDateChange={onDateChange} />
+                <SwitchDate />
                 <CurrentGoal
                     calories={{
                         goal: Number(account?.goal.calories) || 0,

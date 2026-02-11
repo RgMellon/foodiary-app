@@ -4,34 +4,30 @@ import { AppText } from '@ui/components/AppText';
 import { Button } from '@ui/components/Button';
 import { ChevronLeft, ChevronRight } from 'lucide-react-native';
 import { theme } from '@ui/styles/theme';
+import { useHome } from '@app/context/HomeContext/useHome';
 
-interface ISwitchDateProps {
-    date: Date;
-    onDateChange: (date: Date) => void;
-}
-
-export function SwitchDate({ date, onDateChange }: ISwitchDateProps) {
-    const handlePreviousDay = () => {
-        const newDate = new Date(date);
-        newDate.setDate(newDate.getDate() - 1);
-        onDateChange(newDate);
-    };
-
-    const handleNextDay = () => {
-        const newDate = new Date(date);
-        newDate.setDate(newDate.getDate() + 1);
-        onDateChange(newDate);
-    };
+export function SwitchDate() {
+    const { date, nextDay, prevDay, isFetching } = useHome();
 
     return (
-        <View style={styles.container}>
-            <Button size="icon" variant="ghost" onPress={handlePreviousDay}>
+        <View style={[styles.container, { opacity: isFetching ? 0.5 : 1 }]}>
+            <Button
+                disabled={isFetching}
+                size="icon"
+                variant="ghost"
+                onPress={prevDay}
+            >
                 <ChevronLeft />
             </Button>
             <AppText weight="semiBold" color={theme.colors.gray[700]}>
                 {formatDate(date)}
             </AppText>
-            <Button size="icon" variant="ghost" onPress={handleNextDay}>
+            <Button
+                disabled={isFetching}
+                size="icon"
+                variant="ghost"
+                onPress={nextDay}
+            >
                 <ChevronRight />
             </Button>
         </View>
