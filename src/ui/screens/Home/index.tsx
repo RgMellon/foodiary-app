@@ -10,6 +10,7 @@ import { MealCard } from '@ui/components/MealCard';
 import { FullScreenLoad } from '@ui/components/FullScreenLoad';
 import { HomeProvider } from '@app/context/HomeContext/HomeProvider';
 import { useHomeController } from './useHomeController';
+import { Fab } from '@ui/components/Fab';
 
 export function Home() {
     const {
@@ -54,6 +55,7 @@ export function Home() {
                     renderItem={({ item }) => <MealCard meal={item} />}
                 />
             </HomeProvider>
+            {meals && meals?.length > 1 && <Fab />}
         </View>
     );
 }
