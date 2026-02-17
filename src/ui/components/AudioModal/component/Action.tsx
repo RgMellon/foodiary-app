@@ -11,12 +11,18 @@ type ActionProps = {
     state: AudioModalState;
     handleStartRecord: () => void;
     handleStopRecord: () => void;
+    audioUri: string | null;
+    onTryAgain: () => void;
+    onConfirm: () => void;
 };
 
 export function Action({
     state,
     handleStartRecord,
     handleStopRecord,
+    audioUri,
+    onConfirm,
+    onTryAgain,
 }: ActionProps) {
     const [recordTime, setRecordTime] = useState(0);
 
@@ -31,6 +37,13 @@ export function Action({
 
         return () => clearInterval(timer);
     }, [state]);
+
+    useEffect(() => {
+        const MAX_AUDIO_DURATION = 20;
+        if (recordTime >= MAX_AUDIO_DURATION) {
+            handleStopRecord();
+        }
+    }, [state, handleStopRecord]);
 
     if (state === 'idl') {
         return (
@@ -69,8 +82,14 @@ export function Action({
         );
     }
 
-    if (state === 'recoreded') {
-        return <AudioPlayer duration={recordTime} />;
+    if (state === 'recoreded' && audioUri) {
+        return (
+            <AudioPlayer
+                audioUri={audioUri}
+                onTryAgain={onTryAgain}
+                onConfirm={onConfirm}
+            />
+        );
     }
 
     return null;

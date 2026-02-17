@@ -8,7 +8,7 @@ import { AudioModal } from '../AudioModal';
 export function CreateMealOptions() {
     const [currentVisibleModal, setCurrentVisibleModal] = useState<
         null | 'photo' | 'audio'
-    >(null);
+    >('photo');
 
     function handleOpenModal(type: 'audio' | 'photo') {
         setCurrentVisibleModal(type);

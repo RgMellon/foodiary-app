@@ -15,8 +15,16 @@ interface IAudioModalProps {
 }
 
 export function AudioModal({ visible, onClose }: IAudioModalProps) {
-    const { state, handleStartRecord, handleStopRecord, isLoading } =
-        useModalAudioController();
+    const {
+        state,
+        handleStartRecord,
+        handleStopRecord,
+        isLoading,
+        audioUri,
+        onConfirm,
+        onTryAgain,
+    } = useModalAudioController();
+
     const isRecording = state === 'recording';
 
     return (
@@ -76,9 +84,13 @@ export function AudioModal({ visible, onClose }: IAudioModalProps) {
                                     e 100g de salada
                                 </AppText>
                             </View>
+
                             <View style={styles.footer}>
                                 <View style={styles.actionsContainer}>
                                     <Action
+                                        onConfirm={onConfirm}
+                                        onTryAgain={onTryAgain}
+                                        audioUri={audioUri}
                                         state={state}
                                         handleStopRecord={handleStopRecord}
                                         handleStartRecord={handleStartRecord}
