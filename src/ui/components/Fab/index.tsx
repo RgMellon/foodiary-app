@@ -46,7 +46,9 @@ export function Fab() {
                 <BottomSheetView style={{ paddingBottom: bottom, padding: 16 }}>
                     <View style={{ marginBottom: 80 }}>
                         <AppText> Cadastre sua refeição </AppText>
-                        <CreateMealOptions />
+                        <CreateMealOptions
+                            onCreate={() => bottomSheetRef.current?.dismiss()}
+                        />
                     </View>
                 </BottomSheetView>
             </BottomSheetModal>

@@ -1,14 +1,23 @@
-import { Pressable, View } from 'react-native';
+import { Platform, Pressable, View } from 'react-native';
 import { Camera, LucideIcon, Mic } from 'lucide-react-native';
 import { style } from './styles';
 import { AppText } from '../AppText';
 import { useState } from 'react';
 import { AudioModal } from '../AudioModal';
+import { PictureModal } from '../PictureModal';
 
-export function CreateMealOptions() {
+interface ICreateMealOptionsProps {
+    disabled?: boolean;
+    onCreate?: () => void;
+}
+
+export function CreateMealOptions({
+    disabled = false,
+    onCreate,
+}: ICreateMealOptionsProps) {
     const [currentVisibleModal, setCurrentVisibleModal] = useState<
         null | 'photo' | 'audio'
-    >('photo');
+    >(null);
 
     function handleOpenModal(type: 'audio' | 'photo') {
         setCurrentVisibleModal(type);
@@ -22,15 +31,24 @@ export function CreateMealOptions() {
         <View style={style.container}>
             <AudioModal
                 onClose={handleCloseModal}
+                onCreate={onCreate}
                 visible={currentVisibleModal === 'audio'}
             />
+
+            <PictureModal
+                visible={currentVisibleModal === 'photo'}
+                onClose={handleCloseModal}
+            />
+
             <Option
+                disabled={disabled}
                 icon={Mic}
                 text="Audio"
                 onPress={() => handleOpenModal('audio')}
             />
 
             <Option
+                disabled={disabled}
                 icon={Camera}
                 text="Foto"
                 onPress={() => handleOpenModal('photo')}
@@ -43,12 +61,22 @@ interface IOption {
     icon: LucideIcon;
     text: string;
     onPress: () => void;
+    disabled?: boolean;
 }
 
-function Option({ icon: Icon, text, onPress }: IOption) {
+function Option({ icon: Icon, text, onPress, disabled }: IOption) {
     return (
         <View style={style.buttonWrapper}>
-            <Pressable style={style.button} onPress={onPress}>
+            <Pressable
+                disabled={disabled}
+                style={({ pressed }) => [
+                    style.button,
+                    (disabled || (pressed && Platform.OS === 'ios')) && {
+                        opacity: 0.5,
+                    },
+                ]}
+                onPress={onPress}
+            >
                 <View style={style.icon}>
                     <Icon />
                 </View>

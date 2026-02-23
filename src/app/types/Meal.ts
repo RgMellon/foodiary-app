@@ -1,3 +1,5 @@
+import { MealStatus } from './MealStatus';
+
 export type Meal = {
     id: string;
     createdAt: Date;
@@ -11,4 +13,5 @@ export type Meal = {
     }[];
     icon: string;
     name: string;
+    status: MealStatus;
 };

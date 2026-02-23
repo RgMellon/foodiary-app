@@ -12,9 +12,10 @@ import { CreateMealLoader } from '../CreateMealLoader';
 interface IAudioModalProps {
     onClose: () => void;
     visible: boolean;
+    onCreate?: () => void;
 }
 
-export function AudioModal({ visible, onClose }: IAudioModalProps) {
+export function AudioModal({ visible, onClose, onCreate }: IAudioModalProps) {
     const {
         state,
         handleStartRecord,
@@ -23,7 +24,10 @@ export function AudioModal({ visible, onClose }: IAudioModalProps) {
         audioUri,
         onConfirm,
         onTryAgain,
-    } = useModalAudioController();
+    } = useModalAudioController({
+        onClose,
+        onCreate,
+    });
 
     const isRecording = state === 'recording';
 

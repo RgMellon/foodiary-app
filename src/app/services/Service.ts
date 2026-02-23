@@ -1,5 +1,6 @@
 import { env } from '@app/config/env';
 import axios, { isAxiosError } from 'axios';
+import base64 from 'react-native-base64';
 
 export abstract class Service {
     protected static client = axios.create({
@@ -9,7 +10,8 @@ export abstract class Service {
     private static refreshTokenInterceptorId: undefined | number = undefined;
 
     static setToken(token: string) {
-        this.client.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        this.client.defaults.headers.common['Authorization'] =
+            `Bearer ${token}`;
     }
 
     static removeAccessToken() {
@@ -17,8 +19,10 @@ export abstract class Service {
     }
 
     static removeRefreshTokenHandler() {
-        if(this.refreshTokenInterceptorId !== undefined) {
-            this.client.interceptors.request.eject(this.refreshTokenInterceptorId);
+        if (this.refreshTokenInterceptorId !== undefined) {
+            this.client.interceptors.request.eject(
+                this.refreshTokenInterceptorId,
+            );
             this.refreshTokenInterceptorId = undefined;
         }
     }
@@ -27,9 +31,14 @@ export abstract class Service {
         this.removeRefreshTokenHandler();
 
         this.refreshTokenInterceptorId = this.client.interceptors.response.use(
-            response => response,
+            (response) => response,
             async (error) => {
-                if(!isAxiosError(error) || error.response?.status !== 401 || !error.config || error.config.url === '/auth/refresh-token') {
+                if (
+                    !isAxiosError(error) ||
+                    error.response?.status !== 401 ||
+                    !error.config ||
+                    error.config.url === '/auth/refresh-token'
+                ) {
                     return Promise.reject(error);
                 }
 
@@ -40,4 +49,42 @@ export abstract class Service {
             },
         );
     }
+
+    static async uploadPresignedPOST({
+        uploadSignature,
+        file,
+    }: Service.UploadPresignedPOSTParams) {
+        const decodedSignature = base64.decode(uploadSignature);
+        const { url, fields } = JSON.parse(
+            decodedSignature,
+        ) as Service.DecodedUploadSignature;
+        const form = new FormData();
+        for (const [key, value] of Object.entries(fields)) {
+            form.append(key, value);
+        }
+
+        form.append('file', file as any);
+
+        await axios.post(url, form, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+    }
+}
+
+export namespace Service {
+    export type UploadPresignedPOSTParams = {
+        uploadSignature: string;
+        file: {
+            name: string;
+            type: string;
+            uri: string;
+        };
+    };
+
+    export type DecodedUploadSignature = {
+        url: string;
+        fields: Record<string, string>;
+    };
 }
