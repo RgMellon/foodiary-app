@@ -1,9 +1,11 @@
-import { View } from 'react-native';
+import { TouchableOpacity, View } from 'react-native';
 import { style } from './styles';
 import { AppText } from '../AppText';
 import { theme } from '@ui/styles/theme';
 import { Meal } from '@app/types/Meal';
 import { useHome } from '@app/context/HomeContext/useHome';
+import { useNavigation } from '@react-navigation/native';
+import { AppStackNavigationprops } from '@app/navigation/AppStack';
 
 interface IMealCard {
     meal: Meal;
@@ -11,13 +13,17 @@ interface IMealCard {
 
 export function MealCard({ meal }: IMealCard) {
     const { isFetching } = useHome();
+    const navigation = useNavigation<AppStackNavigationprops>();
 
     return (
-        <View style={[style.container, { opacity: isFetching ? 0.5 : 1 }]}>
+        <TouchableOpacity 
+            style={[style.container, { opacity: isFetching ? 0.5 : 1 }]}
+            onPress={() => navigation.navigate('MealDetail')}
+        >
             <AppText>{formatTime(meal.createdAt)}</AppText>
 
             <Card name={meal.name} icon={meal.icon} foods={meal.foods} />
-        </View>
+        </TouchableOpacity>
     );
 }
 

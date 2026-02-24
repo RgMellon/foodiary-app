@@ -1,8 +1,10 @@
 import { createNativeStackNavigator, NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Home } from '@ui/screens/Home';
+import { MealDetail } from '@ui/screens/MealDetail';
 
 type AppStackParamList = {
-    Home: undefined
+    Home: undefined;
+    MealDetail: undefined;
 }
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -15,5 +17,6 @@ export function AppStack() {
         headerShown: false,
     }}>
         <Stack.Screen name='Home' component={Home}/>
+        <Stack.Screen name='MealDetail' component={MealDetail}/>
     </Stack.Navigator>;
 }
