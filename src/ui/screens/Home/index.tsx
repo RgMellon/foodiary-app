@@ -55,7 +55,7 @@ export function Home() {
                     renderItem={({ item }) => <MealCard meal={item} />}
                 />
             </HomeProvider>
-            {meals && meals?.length > 1 && <Fab />}
+            {meals && meals?.length > 0 && <Fab />}
         </View>
     );
 }

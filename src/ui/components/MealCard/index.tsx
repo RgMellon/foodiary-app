@@ -16,9 +16,13 @@ export function MealCard({ meal }: IMealCard) {
     const navigation = useNavigation<AppStackNavigationprops>();
 
     return (
-        <TouchableOpacity 
+        <TouchableOpacity
             style={[style.container, { opacity: isFetching ? 0.5 : 1 }]}
-            onPress={() => navigation.navigate('MealDetail')}
+            onPress={() =>
+                navigation.navigate('MealDetail', {
+                    meailId: meal.id,
+                })
+            }
         >
             <AppText>{formatTime(meal.createdAt)}</AppText>
 
@@ -45,11 +49,19 @@ function Card({ foods, name, icon }: IOption) {
 
     const summary = foods.reduce(
         (acc, food) => {
-            acc.calories += food.calories;
-            acc.fat += food.fat;
-            acc.proteins += food.proteins;
-            acc.carbohydrates += food.carbohydrates;
-            return acc;
+            const proteinCalories = food.proteins * 4;
+            const carbohydratesCalories = food.carbohydrates * 4;
+            const fatCalories = food.fat * 9;
+
+            const totalCalories =
+                proteinCalories + carbohydratesCalories + fatCalories;
+
+            return {
+                calories: acc.calories + totalCalories,
+                fat: acc.fat + food.fat,
+                proteins: acc.proteins + food.proteins,
+                carbohydrates: acc.carbohydrates + food.carbohydrates,
+            };
         },
         {
             calories: 0,
@@ -76,7 +88,7 @@ function Card({ foods, name, icon }: IOption) {
             <View style={style.content}>
                 <View style={style.info}>
                     <AppText weight="bold" color={theme.colors.support.red}>
-                        {summary.calories}
+                        {Number(summary.calories).toFixed(0)}
                     </AppText>
                     <AppText size="sm" color={theme.colors.gray[600]}>
                         Kcal
@@ -84,8 +96,8 @@ function Card({ foods, name, icon }: IOption) {
                 </View>
 
                 <View style={style.info}>
-                    <AppText weight="bold" color={theme.colors.support.green}>
-                        {summary.proteins}
+                    <AppText weight="bold" color={theme.colors.support.teal}>
+                        {summary.proteins.toFixed(0)} g
                     </AppText>
                     <AppText size="sm" color={theme.colors.gray[600]}>
                         Proteinas
@@ -93,8 +105,8 @@ function Card({ foods, name, icon }: IOption) {
                 </View>
 
                 <View style={style.info}>
-                    <AppText weight="bold" color={theme.colors.support.ambar}>
-                        {summary.carbohydrates}
+                    <AppText weight="bold" color={theme.colors.support.yellow}>
+                        {summary.carbohydrates.toFixed(0)} g
                     </AppText>
                     <AppText size="sm" color={theme.colors.gray[600]}>
                         Carboidratos
@@ -102,8 +114,8 @@ function Card({ foods, name, icon }: IOption) {
                 </View>
 
                 <View style={style.info}>
-                    <AppText weight="bold" color={theme.colors.support.yellow}>
-                        {summary.fat}
+                    <AppText weight="bold" color={theme.colors.support.orange}>
+                        {summary.fat.toFixed(0)} g
                     </AppText>
                     <AppText size="sm" color={theme.colors.gray[600]}>
                         Gordura

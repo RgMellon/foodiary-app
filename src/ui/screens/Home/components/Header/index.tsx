@@ -15,11 +15,19 @@ export function Header() {
         .flatMap((meal) => meal.foods)
         .reduce(
             (acc, food) => {
-                acc.calories += food.calories;
-                acc.fat += food.fat;
-                acc.proteins += food.proteins;
-                acc.carbohydrates += food.carbohydrates;
-                return acc;
+                const proteinCalories = food.proteins * 4;
+                const carbohydratesCalories = food.carbohydrates * 4;
+                const fatCalories = food.fat * 9;
+
+                const totalCalories =
+                    proteinCalories + carbohydratesCalories + fatCalories;
+
+                return {
+                    calories: acc.calories + totalCalories,
+                    fat: acc.fat + food.fat,
+                    proteins: acc.proteins + food.proteins,
+                    carbohydrates: acc.carbohydrates + food.carbohydrates,
+                };
             },
             {
                 calories: 0,
@@ -37,7 +45,7 @@ export function Header() {
                 <CurrentGoal
                     calories={{
                         goal: Number(account?.goal.calories) || 0,
-                        current: summary.calories,
+                        current: Number(summary.calories),
                     }}
                     carbohydrates={{
                         goal: Number(100),

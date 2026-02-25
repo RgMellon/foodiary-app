@@ -33,7 +33,7 @@ export function useModalAudioController({
     const [state, setState] = useState<AudioModalState>('idl');
     const [audioUri, setAudioUri] = useState<string | null>(null);
 
-    const { goBack } = useNavigation<AppStackNavigationprops>();
+    const { navigate } = useNavigation<AppStackNavigationprops>();
     const queryClient = useQueryClient();
 
     const audioRecorder = useAudioRecorder(RecordingPresets.LOW_QUALITY);
@@ -72,10 +72,9 @@ export function useModalAudioController({
             memoizedOnClose.current();
             memoizedOnCreate.current?.();
             queryClient.invalidateQueries({ queryKey: ['meals'] });
-            goBack();
-            // navigate('MealDetails', { mealId: meal.id });
+            navigate('MealDetail', { meailId: meal.id });
         }
-    }, [meal?.status, meal?.id, goBack, queryClient]);
+    }, [meal?.status, meal?.id, navigate, queryClient]);
 
     useEffect(() => {
         (async () => {

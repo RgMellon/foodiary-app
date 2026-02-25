@@ -1,5 +1,10 @@
 import { MealStatus } from './MealStatus';
 
+export enum InputType {
+    AUDIO = 'AUDIO',
+    PICTURE = 'PICTURE',
+}
+
 export type Meal = {
     id: string;
     createdAt: Date;
@@ -14,4 +19,5 @@ export type Meal = {
     icon: string;
     name: string;
     status: MealStatus;
+    inputType: InputType;
 };
