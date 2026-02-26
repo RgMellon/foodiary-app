@@ -5,10 +5,12 @@ import {
 } from '@react-navigation/native-stack';
 import { Home } from '@ui/screens/Home';
 import { MealDetail } from '@ui/screens/MealDetail';
+import { Goals } from '@ui/screens/Goals';
 
 type AppStackParamList = {
     Home: undefined;
     MealDetail: { meailId: string };
+    Goals: undefined;
 };
 
 const Stack = createNativeStackNavigator<AppStackParamList>();
@@ -27,6 +29,7 @@ export function AppStack() {
         >
             <Stack.Screen name="Home" component={Home} />
             <Stack.Screen name="MealDetail" component={MealDetail} />
+            <Stack.Screen name="Goals" component={Goals} />
         </Stack.Navigator>
     );
 }
