@@ -20,6 +20,17 @@ export const styles = StyleSheet.create({
         marginTop: 24,
         gap: 20,
     },
+    toggleContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 16,
+        paddingHorizontal: 16,
+        backgroundColor: theme.colors.gray[200],
+        borderRadius: 8,
+        marginBottom: 24,
+        marginTop: 24,
+    },
     buttonContainer: {
         marginTop: 32,
     },

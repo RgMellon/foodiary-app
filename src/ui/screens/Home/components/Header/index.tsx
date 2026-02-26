@@ -48,7 +48,7 @@ export function Header() {
                         current: Number(summary.calories),
                     }}
                     carbohydrates={{
-                        goal: Number(100),
+                        goal: Number(account?.goal.carbohydrates) || 0,
                         current: summary.carbohydrates,
                     }}
                     proteins={{

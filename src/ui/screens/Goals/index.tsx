@@ -1,4 +1,4 @@
-import { View, ScrollView } from 'react-native';
+import { View, ScrollView, Switch } from 'react-native';
 import { Controller } from 'react-hook-form';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { ChevronLeft } from 'lucide-react-native';
@@ -13,7 +13,15 @@ import { useGoalsController } from './useGoalsController';
 
 export function Goals() {
     const { top } = useSafeAreaInsets();
-    const { form, onSubmit, isLoading, goBack } = useGoalsController();
+    const {
+        form,
+        onSubmit,
+        isLoading,
+        goBack,
+        autoCalculate,
+        setAutoCalculate,
+        handleCaloriesChange,
+    } = useGoalsController();
 
     const {
         control,
@@ -44,11 +52,29 @@ export function Goals() {
                     Configure suas metas diárias de nutrição
                 </AppText>
 
+                <View style={styles.toggleContainer}>
+                    <View>
+                        <AppText weight="medium">Cálculo Automático</AppText>
+                        <AppText size="sm" color={theme.colors.gray[700]}>
+                            Calcular macros baseado nas calorias
+                        </AppText>
+                    </View>
+                    <Switch
+                        value={autoCalculate}
+                        onValueChange={setAutoCalculate}
+                        trackColor={{
+                            false: theme.colors.gray[400],
+                            true: theme.colors.lime[600],
+                        }}
+                        thumbColor={theme.colors.white}
+                    />
+                </View>
+
                 <View style={styles.form}>
                     <Controller
                         control={control}
                         name="calories"
-                        render={({ field: { onChange, value } }) => (
+                        render={({ field: { value } }) => (
                             <FormGroup
                                 label="Calorias (kcal)"
                                 error={errors.calories?.message}
@@ -57,9 +83,10 @@ export function Goals() {
                                     placeholder="Ex: 2000"
                                     keyboardType="numeric"
                                     value={value?.toString()}
-                                    onChangeText={(text) =>
-                                        onChange(Number(text) || 0)
-                                    }
+                                    onChangeText={(text) => {
+                                        const calories = Number(text) || 0;
+                                        handleCaloriesChange(calories);
+                                    }}
                                 />
                             </FormGroup>
                         )}

@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigation } from '@react-navigation/native';
 import { Alert } from 'react-native';
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import { goalSchema, GoalFormData } from '@app/schemas/goalSchema';
 import { useUpdateGoal } from '@app/hooks/mutations/useUpdateGoal';
@@ -12,6 +12,7 @@ export function useGoalsController() {
     const { goBack } = useNavigation();
     const { updateGoal, isLoading } = useUpdateGoal();
     const { account } = useAccount();
+    const [autoCalculate, setAutoCalculate] = useState(false);
 
     const form = useForm<GoalFormData>({
         resolver: zodResolver(goalSchema),
@@ -34,6 +35,32 @@ export function useGoalsController() {
         }
     }, [account?.goal, form.reset]);
 
+    const calculateMacros = useCallback(
+        (calories: number) => {
+            if (!autoCalculate || calories <= 0) {
+                return;
+            }
+
+            // Distribuição padrão: 30% proteína, 40% carbs, 30% gordura
+            const proteins = Math.round((calories * 0.3) / 4); // 4 kcal por grama
+            const carbohydrates = Math.round((calories * 0.4) / 4); // 4 kcal por grama
+            const fat = Math.round((calories * 0.3) / 9); // 9 kcal por grama
+
+            form.setValue('proteins', proteins);
+            form.setValue('carbohydrates', carbohydrates);
+            form.setValue('fat', fat);
+        },
+        [autoCalculate, form],
+    );
+
+    const handleCaloriesChange = useCallback(
+        (calories: number) => {
+            form.setValue('calories', calories);
+            calculateMacros(calories);
+        },
+        [form, calculateMacros],
+    );
+
     const onSubmit = async (data: GoalFormData) => {
         try {
             await updateGoal(data);
@@ -55,5 +82,8 @@ export function useGoalsController() {
         onSubmit,
         isLoading,
         goBack,
+        autoCalculate,
+        setAutoCalculate,
+        handleCaloriesChange,
     };
 }
