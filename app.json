@@ -12,6 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.rgmellon.diary"
@@ -21,8 +24,6 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
       "permissions": [
         "android.permission.RECORD_AUDIO",
         "android.permission.MODIFY_AUDIO_SETTINGS"
@@ -39,7 +40,8 @@
     "extra": {
       "eas": {
         "projectId": "d89f0457-6a6c-4426-a144-d5b9f60ed66f"
-      }
+      },
+      "EXPO_PUBLIC_API_URL": "https://api.canto-do-codigo.app.br"
     }
   }
 }
