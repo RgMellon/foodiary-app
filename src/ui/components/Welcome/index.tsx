@@ -71,7 +71,10 @@ export function Welcome() {
                                                 paddingLeft: 10,
                                             }}
                                         >
-                                            {goalMap[account!.profile!.goal].label}
+                                            {
+                                                goalMap[account!.profile!.goal]
+                                                    .label
+                                            }
                                         </Text>{' '}
                                         está pronto
                                     </AppText>
@@ -88,15 +91,29 @@ export function Welcome() {
                                     <View style={styles.body}>
                                         <GoalStats
                                             calories={{
-                                                goal: 200,
+                                                goal:
+                                                    Number(
+                                                        account?.goal.calories,
+                                                    ) || 0,
                                             }}
                                             carbohydrates={{
-                                                goal: 200,
+                                                goal:
+                                                    Number(
+                                                        account?.goal
+                                                            .carbohydrates,
+                                                    ) || 0,
                                             }}
                                             proteins={{
-                                                goal: 200,
+                                                goal:
+                                                    Number(
+                                                        account?.goal.proteins,
+                                                    ) || 0,
                                             }}
-                                            fats={{ goal: 200 }}
+                                            fats={{
+                                                goal:
+                                                    Number(account?.goal.fat) ||
+                                                    0,
+                                            }}
                                         />
                                     </View>
                                 </View>
