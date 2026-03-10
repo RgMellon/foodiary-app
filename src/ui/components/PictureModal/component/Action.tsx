@@ -1,5 +1,5 @@
 import { AppText } from '@ui/components/AppText';
-import { AudioModalState } from '../usePictureModal';
+import { AudioModalState } from '../usePictureModalController';
 import { Button } from '@ui/components/Button';
 import { Mic, Square } from 'lucide-react-native';
 import { theme } from '@ui/styles/theme';

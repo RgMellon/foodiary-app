@@ -12,15 +12,20 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { theme } from '@ui/styles/theme';
 import { AppText } from '../AppText';
 import { CreateMealLoader } from '../CreateMealLoader';
-import { usePictureModalController } from './usePictureModal';
+import { usePictureModalController } from './usePictureModalController';
 import { CameraView } from 'expo-camera';
 
 interface IPictureModalProps {
     onClose: () => void;
+    onCreate?: () => void;
     visible: boolean;
 }
 
-export function PictureModal({ visible, onClose }: IPictureModalProps) {
+export function PictureModal({
+    visible,
+    onClose,
+    onCreate,
+}: IPictureModalProps) {
     const {
         onConfirm,
         onTryAgain,
@@ -30,7 +35,7 @@ export function PictureModal({ visible, onClose }: IPictureModalProps) {
         handleTakePicture,
         cameraRef,
         photoUri,
-    } = usePictureModalController();
+    } = usePictureModalController({ onClose, onCreate });
 
     return (
         <Modal

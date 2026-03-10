@@ -38,6 +38,7 @@ export function CreateMealOptions({
             <PictureModal
                 visible={currentVisibleModal === 'photo'}
                 onClose={handleCloseModal}
+                onCreate={onCreate}
             />
 
             <Option

@@ -1,4 +1,4 @@
-import { useMeals } from '@app/hooks/query/useMeal';
+import { useMeals } from '@app/hooks/query/useMeals';
 import { useState } from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
